@@ -9,8 +9,11 @@ To navigate your way through the api, visit the official docs for guidance and m
 + You will node and npm installed. You can use yarn instead of npm. Start with the following:
 
 > git clone https://github.com/neymarjimoh/David-s-Laundromat-Services.git
+
 > cd David-s-Laundromat-Services
+
 > npm install or yarn install
+
 > npm start or yarn start
 
 ## Contributing:
