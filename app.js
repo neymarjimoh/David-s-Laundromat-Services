@@ -1,12 +1,15 @@
 const express = require("express");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const cors = require('cors');
 const morgan = require('morgan');
-// const config = require("config");
+const mongoose = require("./config/database");
 
 const port = process.env.PORT || 5000;
 
 const userRoute = require('./routes/users');
+const customerRoute = require('./routes/customers');
+const washRoute = require('./routes/wash');
+const paymentRoute = require('./routes/payment');
 
 const app = express();
 
@@ -15,23 +18,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// const db = config.get("mongoURI");
-const db = process.env.MONGO_URI || 'mongodb://127.0.0.1/david-laundromat';
-
-mongoose
-  .connect(db, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-  })
-  .then(() => console.log("💻 Database Connected sucessfully.."))
-  .catch(err => console.error(err));
 
 app.get("/", (req, res) => {
-  res.send("Server working 🔥");
+  res.send("Hello there, please read the api docs for more info... 🔥");
 });
 
 
-app.use('/api/users', userRoute);
+app.use('/api/user', userRoute);
+app.use('/api/customer', customerRoute);
+app.use('/api/wash', washRoute);
+app.use('/api/payment', paymentRoute);
 
 // You can set 404 and 500 errors
 app.use((req, res, next) => {
@@ -41,12 +37,18 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
-    res.status(error.status || 500)
-    res.json({
-        error: {
-            message: error.message
-        }
-    })
+    if(error.status === 404)
+        res.status(404).json({message: "Not found"});
+    else 
+        res.status(500).json({message: "Server error"});
+
+      // res.status(error.status || 500);
+
+    // res.json({
+    //     error: {
+    //         message: error.message
+    //     }
+    // })
 })
 
 

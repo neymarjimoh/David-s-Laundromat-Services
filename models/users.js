@@ -5,29 +5,35 @@ const UserSchema = new Schema({
 //   _id: mongoose.Schema.Types.ObjectId,
   name: {
     type: String,
+    trim: true,
     required: true
   },
   password: {
     type: String,
     required: true,
-    min: 6
+    minlength: 6
   },
   email: {
     type: String,
-    required: true,
-    get: obfuscate
+    unique: true,
+    trim: true,
+    get: obfuscate,
+    required: true
   },
   resumptionDate: {
     type: Date,
+    trim: true,
+    // required: true,
     default: Date.now
   },
   phoneNumber: {
     type: Number,
-    required: true,
-    min: 11
+    trim: true,
+    required: true
   },
   homeAddress: {
     type: String,
+    trim: true,
     required: true
   }
 });
