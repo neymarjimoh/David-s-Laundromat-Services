@@ -34,10 +34,10 @@ exports.createAWashRecord = (req, res, next) => {
                     return res.status(201).json({
                         message: 'Wash record entered successfully',
                         createdWash: record,
-                        request:{
-                            type: 'GET',
-                            url: 'http://localhost:5000/api/wash/' + record._id
-                        }
+                        // request:{
+                        //     type: 'GET',
+                        //     url: 'http://localhost:5000/api/wash/' + record._id
+                        // }
                     })
                 })
                 .catch(err => {

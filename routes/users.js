@@ -27,13 +27,13 @@ router.post("/signup", UsersController.userSignUp)
 // /api/user/signup
 router.post("/signin", UsersController.userSignIn)
 
-/**
- * @method - Post
- * @param - /new
- * @description - User addition by authenticated user
-*/
-// /api/user/new
-router.post('/new', checkAuth, UsersController.addNewUser)
+// /**
+//  * @method - Post
+//  * @param - /new
+//  * @description - User addition by authenticated user
+// */
+// // /api/user/new
+// router.post('/new', checkAuth, UsersController.addNewUser)
 
 /**
  * @method - Put

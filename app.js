@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 // const mongoose = require("mongoose");
 const cors = require('cors');
@@ -24,10 +26,10 @@ app.get("/", (req, res) => {
 });
 
 
-app.use('/api/user', userRoute);
-app.use('/api/customer', customerRoute);
-app.use('/api/wash', washRoute);
-app.use('/api/payment', paymentRoute);
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/customers', customerRoute);
+app.use('/api/v1/wash', washRoute);
+app.use('/api/v1/payments', paymentRoute);
 
 // You can set 404 and 500 errors
 app.use((req, res, next) => {

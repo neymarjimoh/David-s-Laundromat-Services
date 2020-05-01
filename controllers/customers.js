@@ -90,16 +90,17 @@ exports.getAllCustomers = (req, res, next) => {
                 count: customers.length,
                 customers: customers.map(customer => {
                     return {
-                        _id: customer._id,
-                        name:customer.name,
-                        email: customer.email,
-                        phoneNumber: customer.phoneNumber,
-                        homeAddress: customer.homeAddress,
-                        registrationDate: customer.registrationDate,
-                        request: {
-                            type: 'GET',
-                            url: 'http://localhost:5000/api/customer/' + customer._id
-                        }
+                        customer: customer
+                        // _id: customer._id,
+                        // name:customer.name,
+                        // email: customer.email,
+                        // phoneNumber: customer.phoneNumber,
+                        // homeAddress: customer.homeAddress,
+                        // registrationDate: customer.registrationDate,
+                        // request: {
+                        //     type: 'GET',
+                        //     url: 'http://localhost:5000/api/customer/' + customer._id
+                        // }
                     }                    
                 })
             })
@@ -121,9 +122,9 @@ exports.getCustomer = (req, res, next) => {
         if (doc) {
             res.status(200).json({
                 customer: doc,
-                request: 'GET',
-                description: 'GET_ALL_CUSTOMERS',
-                url: 'http://localhost:5000/api/customer'
+                // request: 'GET',
+                // description: 'GET_ALL_CUSTOMERS',
+                // url: 'http://localhost:5000/api/customer'
             })
         } else {
             res.status(404).json({

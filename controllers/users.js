@@ -104,56 +104,57 @@ exports.userSignOut = (req, res, next) => {
 
 }
 
-exports.addNewUser = (req, res, next) => {
-    const { name, password, email, resumptionDate, phoneNumber, homeAddress } = req.body;
+// exports.addNewUser = (req, res, next) => {
+//     const { name, password, email, resumptionDate, phoneNumber, homeAddress } = req.body;
 
-    User
-        .find({ email })
-        .exec()
-        .then( result => {
-            if (result.length >= 1) {
-                return res.status(409).json({
-                    message: 'Can\'t add user. User with this email already exists'
-                })
-            } else {
-                bcrypt.hash(password, 10, (err, hash) => {
-                    if (err) {
-                        return res.status(500).json({
-                            error: err
-                        })
-                    }
-                    const user = new User({
-                        name, 
-                        password: hash, 
-                        email, 
-                        resumptionDate,
-                        phoneNumber, 
-                        homeAddress
-                    })
-                    user
-                        .save()
-                        .then( result => {
-                            return res.status(201).json({
-                                message: 'New User added successfully',
-                                result
-                            })
-                        })
-                        .catch( err => {
-                            console.log('Server error', err);
-                            res.status(500).json({
-                                error: err
-                            })
-                        })
-                })
+//     User
+//         .find({ email })
+//         .exec()
+//         .then( result => {
+//             if (result.length >= 1) {
+//                 return res.status(409).json({
+//                     message: 'Can\'t add user. User with this email already exists'
+//                 })
+//             } else {
+//                 bcrypt.hash(password, 10, (err, hash) => {
+//                     if (err) {
+//                         return res.status(500).json({
+//                             error: err
+//                         })
+//                     }
+//                     const user = new User({
+//                         name, 
+//                         password: hash, 
+//                         email, 
+//                         resumptionDate,
+//                         phoneNumber, 
+//                         homeAddress
+//                     })
+//                     user
+//                         .save()
+//                         .then( result => {
+//                             return res.status(201).json({
+//                                 message: 'New User added successfully',
+//                                 result
+//                             })
+//                         })
+//                         .catch( err => {
+//                             console.log('Server error', err);
+//                             res.status(500).json({
+//                                 error: err
+//                             })
+//                         })
+//                 })
  
-            }
-        })
+//             }
+//         })
 
-}
+// }
 
 exports.updateUser = (req, res, next) => {
     User
         .findByIdAndUpdate( req.params.userId, req.body, { new: true } )
+        .select('-password')
         .exec()
         .then( result => {
             if (!result) {
@@ -237,9 +238,9 @@ exports.getAUserById = (req, res, next) => {
         if (doc) {
             res.status(200).json({
                 user: doc,
-                request: 'GET',
-                description: 'GET_ALL_USERS',
-                url: 'http://localhost:5000/api/user'
+                // request: 'GET',
+                // description: 'GET_ALL_USERS',
+                // url: 'http://localhost:5000/api/user'
             })
         } else {
             res.status(404).json({
