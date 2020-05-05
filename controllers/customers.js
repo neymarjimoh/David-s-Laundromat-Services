@@ -28,13 +28,13 @@ exports.addCustomer = (req, res, next) => {
             customer
                 .save()
                 .then( record => {
-                    res.status(201).json({
+                    return res.status(201).json({
                         message: 'Customer added successfully',
                         customer: record
                     })
                 })
                 .catch( err => {
-                    res.status(500).json({
+                    return res.status(500).json({
                         error: err 
                     })
                 })
@@ -107,7 +107,7 @@ exports.getAllCustomers = (req, res, next) => {
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({
+            return res.status(500).json({
                 message: err
             })
         })
@@ -120,14 +120,14 @@ exports.getCustomer = (req, res, next) => {
     .then( doc => {
         console.log("From Database", doc);
         if (doc) {
-            res.status(200).json({
+            return res.status(200).json({
                 customer: doc,
                 // request: 'GET',
                 // description: 'GET_ALL_CUSTOMERS',
                 // url: 'http://localhost:5000/api/customer'
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'No valid entry found for the provided id'
             })
         }
@@ -135,6 +135,6 @@ exports.getCustomer = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        res.status(500).json({error: err || 'Having issues, internal server error.'})
+        return res.status(500).json({error: err || 'Encountered problem while processing your request..'})
     })
 }

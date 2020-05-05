@@ -31,11 +31,18 @@ const UserSchema = new Schema({
     trim: true,
     required: true
   },
+  wash: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Wash'
+    }
+  ],
   homeAddress: {
     type: String,
-    trim: true,
-    required: true
+    trim: true
   }
+},{
+  timestamps: true
 });
 
 function obfuscate(email) {

@@ -10,7 +10,6 @@ const CustomerSchema = new Schema({
     phoneNumber: {
       type: Number,
       trim: true,
-      min: 11,
       required: true
     },
     email: {
@@ -22,8 +21,7 @@ const CustomerSchema = new Schema({
     },
     homeAddress: {
       type: String,
-      trim: true,
-      required: true
+      trim: true
     },
     registrationDate: {
       type: Date,

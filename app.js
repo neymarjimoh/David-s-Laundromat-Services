@@ -42,7 +42,7 @@ app.use((error, req, res, next) => {
     if(error.status === 404)
         res.status(404).json({message: "Not found"});
     else 
-        res.status(500).json({message: "Server error"});
+        res.status(500).json({message: "Oops, problem occurred while processing your request.."});
 
       // res.status(error.status || 500);
 

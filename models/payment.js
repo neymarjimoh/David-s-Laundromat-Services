@@ -12,16 +12,16 @@ const PaymentSchema = new Schema(
             type: Date,
             default: Date.now  
         },
-        customer: {
-            type: Schema.Types.ObjectId,
-            ref: 'Customer',
-            required: true
-        },
-        staff: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: true        
-        },
+        // customer: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'Customer',
+        //     required: true
+        // },
+        // staff: {
+        //     type: Schema.Types.ObjectId,
+        //     ref: 'User',
+        //     required: true        
+        // },
         paymentType: {
             type: String,
             enum: ['CASH', 'TRANSFER', 'POS'],

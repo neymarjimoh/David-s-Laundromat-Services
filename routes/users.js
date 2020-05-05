@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const { checkSchema } = require('express-validator');
 // const mongoose = require("mongoose");
 // const bcrypt = require('bcryptjs');
 // const jwt = require('jsonwebtoken');
-
+const { userValidationRules, validate } = require('../middleware/userValidator');
 const checkAuth = require('../middleware/checkAuth');
 const UsersController = require('../controllers/users');
 const User = require('../models/users');
@@ -17,7 +18,7 @@ const User = require('../models/users');
 
 // adding a user requires only authorized users
 // /api/user/signup
-router.post("/signup", UsersController.userSignUp)
+router.post("/signup", userValidationRules(), validate, UsersController.userSignUp)
 
 /**
  * @method - POST

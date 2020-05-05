@@ -41,14 +41,14 @@ exports.createAWashRecord = (req, res, next) => {
                     })
                 })
                 .catch(err => {
-                    res.status(400).json({
+                    return res.status(400).json({
                         message: `Invalid wash enteries. || ${err}`
                     })
                 })
             })
         })
         .catch( err => {
-            return res.status(500).json({ message: err && 'Internal Server error' });
+            return res.status(500).json({ message: err });
         })
 }
 
@@ -80,8 +80,8 @@ exports.getAllWashRecords = (req, res, next) => {
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({
-                message:`Internal server error || ${err}`
+            return res.status(500).json({
+                message:`Problem occured.. || ${err}`
             })
         })
 }
@@ -101,7 +101,7 @@ exports.getAWashRecord = (req, res, next) => {
                 }
             })
         }
-        res.status(200).json({
+        return res.status(200).json({
             wash: result,
             request: {
                 type: 'GET',
@@ -111,8 +111,8 @@ exports.getAWashRecord = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        res.status(500).json({
-            message:`Internal server error || ${err}`
+        return res.status(500).json({
+            message:`Problem occurred while processing your request.. ` || `${err}`
         })
     })
 }
@@ -126,7 +126,7 @@ exports.deleteAWashRecord = (req, res, next) => {
                 message: 'Wash  record does not exist or has already been deleted'
             })
         }
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Wash record deleted successfully.'
             // request: {
             //     type: 'POST',
@@ -141,8 +141,8 @@ exports.deleteAWashRecord = (req, res, next) => {
         })
     })
     .catch(err => {
-        res.status(500).json({
-            error: `Some errors occurred while removing this record. || ${err}`
+        return res.status(500).json({
+            error: `Some errors occurred while removing this record. ` || `${err}`
         })
     })
 }

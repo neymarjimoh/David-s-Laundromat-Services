@@ -3,6 +3,8 @@ const router = express.Router();
 
 const checkAuth = require('../middleware/checkAuth');
 const CustomersController = require('../controllers/customers');
+const { customerValidationRules, validate } = require('../middleware/customerValidator');
+
 
 /**
  * @method - Post
@@ -11,7 +13,7 @@ const CustomersController = require('../controllers/customers');
 */
 
 // /api/customer
-router.post("/", checkAuth, CustomersController.addCustomer);
+router.post("/", checkAuth, customerValidationRules(), validate, CustomersController.addCustomer);
 
 /**
  * @method - Put

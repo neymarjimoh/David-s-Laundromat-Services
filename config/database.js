@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const config = require('./index');
 
 const db = config.dbUrl || 'mongodb://127.0.0.1/david-laundromat';
+const db_local = 'mongodb://127.0.0.1/david-laundromat';
 
 mongoose.Promise = global.Promise;
 

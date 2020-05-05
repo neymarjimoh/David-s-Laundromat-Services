@@ -49,7 +49,7 @@ exports.enterAPaymentRecord = (req, res, next) => {
                         })
                     })
                     .catch(err => {
-                        res.status(400).json({
+                        return res.status(400).json({
                             message: `Invalid wash enteries. || ${err}`
                         })
                     })
@@ -57,7 +57,7 @@ exports.enterAPaymentRecord = (req, res, next) => {
             })
         })
         .catch( err => {
-            return res.status(500).json({ message: err && 'Internal server error' });
+            return res.status(500).json({ message: err && 'Problem occured while entering this record..' });
         })
 }
 
@@ -87,8 +87,8 @@ exports.getAllPaymentRecords = (req, res, next) => {
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({
-                message:`Internal server error || ${err}`
+            return res.status(500).json({
+                message:`Problem occured while processing this request.` || `${err}`
             })
         })
 }
@@ -108,7 +108,7 @@ exports.getAPaymentRecord = (req, res, next) => {
                     }
                 })
             }
-            res.status(200).json({
+            return res.status(200).json({
                 payment: result,
                 request: {
                     type: 'GET',
@@ -118,8 +118,8 @@ exports.getAPaymentRecord = (req, res, next) => {
         })
         .catch( err => {
             console.log(err)
-            res.status(500).json({
-                message:`Internal server error || ${err}`
+            return res.status(500).json({
+                message:`Problem occured while processing this request.` || `${err}`
             })
         })
 }
@@ -134,7 +134,7 @@ exports.deleteAPaymentRecord = (req, res, next) => {
                     message: 'Payment  record does not exist or has already been deleted.'
                 })
             }
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Payment record deleted successfully.',
                 // request: {
                 //     type: 'POST',
@@ -149,7 +149,7 @@ exports.deleteAPaymentRecord = (req, res, next) => {
             })
         })
         .catch(err => {
-            res.status(500).json({
+            return res.status(500).json({
                 error: err
             })
         })

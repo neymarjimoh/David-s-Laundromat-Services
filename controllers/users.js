@@ -29,22 +29,22 @@ exports.userSignUp = (req, res, next) => {
                             password: hash, 
                             email, 
                             resumptionDate, 
-                            phoneNumber, 
+                            phoneNumber: `+234${phoneNumber}`, 
                             homeAddress 
                         })
                         user
                             .save()
                             .then( result => {
                                 console.log('User signed up successfully');
-                                res.status(201).json({ 
+                                return res.status(201).json({ 
                                     message: 'User(staff) signed up successfully',
                                     result
                                 });
                             })
                             .catch( err => {
                                 console.log('Server error');
-                                res.status(500).json({
-                                    message: 'Server error'
+                                return res.status(500).json({
+                                    message: 'Problem occurred while processing your request..'
                                 })
                             })
                     }
@@ -87,14 +87,15 @@ exports.userSignIn = (req, res, next) => {
                         token
                     })
                 }
-                res.status(401).json({
+                return res.status(401).json({
                     message: 'Invalid login credentials'
                 })
             })
         })
         .catch( err => {
-            res.status(500).json({ 
-                error: 'Server error' 
+            console.log('server error');
+            return res.status(500).json({ 
+                error: err 
             });
         })
 
@@ -168,7 +169,7 @@ exports.updateUser = (req, res, next) => {
             })
         })
         .catch( err => {
-            res.status(500).json({
+            return res.status(500).json({
                 error: err
             })
         })
@@ -185,12 +186,12 @@ exports.deleteUser = (req, res, next) => {
                     message: 'User does not exist or has already been deleted'
                 })
             }
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'User deleted successfully'
             })
         })
         .catch( err => {
-            res.status(500).json({
+            return res.status(500).json({
                 error: err
             })
         })
@@ -200,6 +201,7 @@ exports.deleteUser = (req, res, next) => {
 exports.getAllUsers = (req, res, next) => {
     User
         .find()
+        .populate('wash', '-__v')
         .exec()
         .then( users => {
             res.status(200).json({
@@ -209,7 +211,7 @@ exports.getAllUsers = (req, res, next) => {
                         _id: user._id,
                         name:user.name,
                         email: user.email,
-                        phoneNumber:user.phoneNumber,
+                        phoneNumber:`+234${user.phoneNumber}`,
                         homeAddress: user.homeAddress,
                         resumptionDate: user.resumptionDate,
                         request: {
@@ -222,7 +224,7 @@ exports.getAllUsers = (req, res, next) => {
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({
+            return res.status(500).json({
                 message: err
             })
         })
@@ -232,18 +234,19 @@ exports.getAUserById = (req, res, next) => {
     const id = req.params.userId
     User.findById(id)
     .select('-password')
+    .populate('wash', '-__v')
     .exec()
     .then( doc => {
         console.log("From Database", doc);
         if (doc) {
-            res.status(200).json({
+            return res.status(200).json({
                 user: doc,
                 // request: 'GET',
                 // description: 'GET_ALL_USERS',
                 // url: 'http://localhost:5000/api/user'
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'No valid entry found for the provided id'
             })
         }
@@ -251,6 +254,6 @@ exports.getAUserById = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        res.status(500).json({error: err || 'Having issues, internal server error.'})
+        return res.status(500).json({error: err || 'Problem occurred while processing your request..'})
     })
 }
