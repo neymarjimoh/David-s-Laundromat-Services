@@ -50,14 +50,14 @@ exports.enterAPaymentRecord = (req, res, next) => {
                     })
                     .catch(err => {
                         return res.status(400).json({
-                            message: `Invalid wash enteries. || ${err}`
+                            message: `Invalid wash enteries.`
                         })
                     })
                 })
             })
         })
         .catch( err => {
-            return res.status(500).json({ message: err && 'Problem occured while entering this record..' });
+            return res.status(500).json({ message: 'Problem occured while entering this record..' });
         })
 }
 
@@ -88,7 +88,7 @@ exports.getAllPaymentRecords = (req, res, next) => {
         .catch( err => {
             console.log(err);
             return res.status(500).json({
-                message:`Problem occured while processing this request.` || `${err}`
+                message: `Problem occured while processing this request.`
             })
         })
 }
@@ -119,7 +119,7 @@ exports.getAPaymentRecord = (req, res, next) => {
         .catch( err => {
             console.log(err)
             return res.status(500).json({
-                message:`Problem occured while processing this request.` || `${err}`
+                message:`Problem occured while processing this request.`
             })
         })
 }
@@ -150,7 +150,7 @@ exports.deleteAPaymentRecord = (req, res, next) => {
         })
         .catch(err => {
             return res.status(500).json({
-                error: err
+                error: "Error occurred. Unable to process your request.."
             })
         })
 }

@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { checkSchema } = require('express-validator');
-// const mongoose = require("mongoose");
-// const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
 const { userValidationRules, validate } = require('../middleware/userValidator');
 const checkAuth = require('../middleware/checkAuth');
 const UsersController = require('../controllers/users');
@@ -42,7 +39,7 @@ router.post("/signin", UsersController.userSignIn)
  * @description - User Update by authenticated user
 */
 // /api/user/:userId
-router.put('/:userId', checkAuth, UsersController.updateUser)
+router.put("/:userId", checkAuth, UsersController.updateUser)
 
 /**
  * @method - Delete
@@ -68,9 +65,5 @@ router.get("/", checkAuth, UsersController.getAllUsers);
 */
 // /api/user/:userId
 router.get("/:userId", checkAuth, UsersController.getAUserById);
-
-
-
-
 
 module.exports = router;

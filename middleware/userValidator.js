@@ -7,7 +7,7 @@ const userValidationRules = () => {
     // password must be at least 8 chars long
     body('password').not().isEmpty().isLength({ min: 8 }).withMessage('Password must have at least 8 characters'),
     // phoneNumber must be numeric
-    body('phoneNumber').isNumeric(),
+    body('phoneNumber').not().isEmpty(),
   ]
 }
 

@@ -42,13 +42,13 @@ exports.createAWashRecord = (req, res, next) => {
                 })
                 .catch(err => {
                     return res.status(400).json({
-                        message: `Invalid wash enteries. || ${err}`
+                        message: `Invalid wash enteries.`
                     })
                 })
             })
         })
         .catch( err => {
-            return res.status(500).json({ message: err });
+            return res.status(500).json({ message: "Error occurred. Unable to process your request.." });
         })
 }
 
@@ -81,7 +81,7 @@ exports.getAllWashRecords = (req, res, next) => {
         .catch( err => {
             console.log(err);
             return res.status(500).json({
-                message:`Problem occured.. || ${err}`
+                message: `Problem occured..`
             })
         })
 }
@@ -112,7 +112,7 @@ exports.getAWashRecord = (req, res, next) => {
     .catch( err => {
         console.log(err)
         return res.status(500).json({
-            message:`Problem occurred while processing your request.. ` || `${err}`
+            message:`Problem occurred while processing your request.. `
         })
     })
 }
@@ -142,7 +142,7 @@ exports.deleteAWashRecord = (req, res, next) => {
     })
     .catch(err => {
         return res.status(500).json({
-            error: `Some errors occurred while removing this record. ` || `${err}`
+            error: `Some errors occurred while removing this record. `
         })
     })
 }

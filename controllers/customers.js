@@ -18,11 +18,12 @@ exports.addCustomer = (req, res, next) => {
                     message: 'There\'s a record for this customer already!' 
                 })
             }
+            const modifiedNumber = `(+234)-${phoneNumber}`;
             const customer = new Customer({
                 name, 
                 email, 
                 registrationnDate, 
-                phoneNumber, 
+                phoneNumber: modifiedNumber, 
                 homeAddress
             })
             customer
@@ -35,7 +36,7 @@ exports.addCustomer = (req, res, next) => {
                 })
                 .catch( err => {
                     return res.status(500).json({
-                        error: err 
+                        error: 'Error occurred. Unable to create customer'
                     })
                 })
         })
@@ -53,7 +54,7 @@ exports.updateCustomer = (req, res, next) => {
                 })
             }
             if(err) return res.status(500).json({
-                error: err
+                error: "Error occurred. Unable to process your request.."
             })
             return res.status(200).json({
                 message: 'Customer updated successfully',
@@ -72,7 +73,7 @@ exports.deleteCustomer = (req, res, next) => {
                 })
             }
             if(err) return res.status(500).json({
-                message: 'Internal server error'
+                message: 'Error occurred. Unable to process your request..'
             })
             return res.status(200).json({
                 message: 'Customer deleted successfully'
@@ -108,7 +109,7 @@ exports.getAllCustomers = (req, res, next) => {
         .catch( err => {
             console.log(err);
             return res.status(500).json({
-                message: err
+                message: "Error occurred. Unable to process your request.."
             })
         })
 }
@@ -121,6 +122,7 @@ exports.getCustomer = (req, res, next) => {
         console.log("From Database", doc);
         if (doc) {
             return res.status(200).json({
+                meassage: "Customer found..",
                 customer: doc,
                 // request: 'GET',
                 // description: 'GET_ALL_CUSTOMERS',
@@ -135,6 +137,6 @@ exports.getCustomer = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        return res.status(500).json({error: err || 'Encountered problem while processing your request..'})
+        return res.status(500).json({error: 'Encountered problem while processing your request..'})
     })
 }

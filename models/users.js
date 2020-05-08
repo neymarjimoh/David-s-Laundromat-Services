@@ -29,7 +29,8 @@ const UserSchema = new Schema({
   phoneNumber: {
     type: Number,
     trim: true,
-    required: true
+    required: true,
+    get: changeNumber
   },
   wash: [
     {
@@ -51,6 +52,16 @@ function obfuscate(email) {
         return email.slice(0, separatorIndex).replace(/./g, '*') + email.slice(separatorIndex);
     }
     return email.slice(0, 2) + email.slice(2, separatorIndex).replace(/./g, '*') + email.slice(separatorIndex);
+}
+
+function changeNumber(phoneNumber) {
+  // to check if the phonumber starts with +234 or 234 since it is a Nigerian number
+  const phoneString = phoneNumber.toString();
+  const isStartWith = phoneString.slice(0, 3);
+  if( isStartWith === "234" ) {
+    return '(+234)-' + phoneString.slice(3);
+  }
+  return '(+234)-' + phoneNumber;
 }
 
 module.exports = mongoose.model("User", UserSchema);

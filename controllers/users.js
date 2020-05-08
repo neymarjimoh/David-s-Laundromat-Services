@@ -29,7 +29,7 @@ exports.userSignUp = (req, res, next) => {
                             password: hash, 
                             email, 
                             resumptionDate, 
-                            phoneNumber: `+234${phoneNumber}`, 
+                            phoneNumber, 
                             homeAddress 
                         })
                         user
@@ -95,7 +95,7 @@ exports.userSignIn = (req, res, next) => {
         .catch( err => {
             console.log('server error');
             return res.status(500).json({ 
-                error: err 
+                error: "Error occurred. Unable to process your request.." 
             });
         })
 
@@ -170,7 +170,7 @@ exports.updateUser = (req, res, next) => {
         })
         .catch( err => {
             return res.status(500).json({
-                error: err
+                error: "Error occurred. Unable to process your request.."
             })
         })
 
@@ -192,7 +192,7 @@ exports.deleteUser = (req, res, next) => {
         })
         .catch( err => {
             return res.status(500).json({
-                error: err
+                error: "Error occurred. Unable to process your request.."
             })
         })
 
@@ -211,7 +211,7 @@ exports.getAllUsers = (req, res, next) => {
                         _id: user._id,
                         name:user.name,
                         email: user.email,
-                        phoneNumber:`+234${user.phoneNumber}`,
+                        phoneNumber: user.phoneNumber,
                         homeAddress: user.homeAddress,
                         resumptionDate: user.resumptionDate,
                         request: {
@@ -225,7 +225,7 @@ exports.getAllUsers = (req, res, next) => {
         .catch( err => {
             console.log(err);
             return res.status(500).json({
-                message: err
+                message: "Error occurred. Unable to process your request.."
             })
         })
 }
@@ -254,6 +254,6 @@ exports.getAUserById = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        return res.status(500).json({error: err || 'Problem occurred while processing your request..'})
+        return res.status(500).json({error: 'Problem occurred while processing your request..'})
     })
 }
