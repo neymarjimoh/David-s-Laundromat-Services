@@ -8,7 +8,7 @@ const CustomerSchema = new Schema({
       required: true
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       trim: true,
       required: true
     },
@@ -31,8 +31,5 @@ const CustomerSchema = new Schema({
   }, 
   {timestamps: true}
 );
-// schema.set(timestamps, {
-//   createdAt: true,
-//   updatedAt: { path: 'updatedAt', setOnInsert: false }
-// });
+
 module.exports = mongoose.model("Customer", CustomerSchema);

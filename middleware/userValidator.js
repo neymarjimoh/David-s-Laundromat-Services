@@ -1,13 +1,28 @@
 const { body, validationResult } = require('express-validator')
 const userValidationRules = () => {
   return [
-    body('name').not().isEmpty().isLength({min: 5}).trim().escape().withMessage('Name must have more than 5 characters'),
+    body('name')
+      .not().isEmpty()
+      .isLength({min: 5})
+      .trim()
+      .escape()
+      .withMessage('Name must have more than 5 characters'),
     // email must be an email
-    body('email').not().isEmpty().isEmail().normalizeEmail(),
+    body('email')
+      .not().isEmpty()
+      .isEmail()
+      .normalizeEmail(),
     // password must be at least 8 chars long
-    body('password').not().isEmpty().isLength({ min: 8 }).withMessage('Password must have at least 8 characters'),
-    // phoneNumber must be numeric
-    body('phoneNumber').not().isEmpty(),
+    body('password')
+      .not().isEmpty()
+      .isLength({ min: 8 })
+      .withMessage('Password must have at least 8 characters'),
+    // phoneNumber must be  Nigerian Number
+    body('phoneNumber')
+      .isLength({ min: 10, max: 15 })
+      .withMessage('Mobile Number must between 10 to 15 characters long')
+      .matches(/^[+-\d]+$/)
+      .withMessage('Mobile Number must be a valid Nigerian number'),
   ]
 }
 

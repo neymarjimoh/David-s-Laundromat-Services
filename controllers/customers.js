@@ -18,12 +18,11 @@ exports.addCustomer = (req, res, next) => {
                     message: 'There\'s a record for this customer already!' 
                 })
             }
-            const modifiedNumber = `(+234)-${phoneNumber}`;
             const customer = new Customer({
                 name, 
                 email, 
                 registrationnDate, 
-                phoneNumber: modifiedNumber, 
+                phoneNumber, 
                 homeAddress
             })
             customer
