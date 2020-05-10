@@ -1,33 +1,30 @@
 const express = require("express");
 const router = express.Router();
 
-const checkAuth = require('../middleware/checkAuth');
-const CustomersController = require('../controllers/customers');
+const { addCustomer, updateCustomer, deleteCustomer, getAllCustomers, getCustomer } = require('../controllers/customers');
+const { customerValidationRules, validate } = require('../middleware/customerValidator');
+
 
 /**
  * @method - Post
  * @param - /
  * @description - Add a customer by authenticated user
 */
-
-// /api/customer
-router.post("/", checkAuth, CustomersController.addCustomer);
+router.post("/", customerValidationRules(), validate, addCustomer);
 
 /**
  * @method - Put
  * @param - /:customerId
  * @description - Customer Update by authenticated user
 */
-// /api/customer/:customerId
-router.put('/:customerId', checkAuth, CustomersController.updateCustomer);
+router.put('/:customerId', updateCustomer);
 
 /**
  * @method - Delete
  * @param - /:customerId
  * @description - Customer Deletion by authenticated user
 */
-// /api/customer/:customerId
-router.delete("/:customerId", checkAuth, CustomersController.deleteCustomer);
+router.delete("/:customerId", deleteCustomer);
 
 
 /**
@@ -35,16 +32,13 @@ router.delete("/:customerId", checkAuth, CustomersController.deleteCustomer);
  * @param - /
  * @description - Read all customers by authenticated user
 */
-// /api/customer
-router.get("/", checkAuth, CustomersController.getAllCustomers);
+router.get("/", getAllCustomers);
 
 /**
  * @method - Get
  * @param - /:customerId
  * @description - Read a specific customer by authenticated user
 */
-// /api/customer/:customerId
-router.get("/:customerId", CustomersController.getCustomer);
-
+router.get("/:customerId", getCustomer);
 
 module.exports = router;

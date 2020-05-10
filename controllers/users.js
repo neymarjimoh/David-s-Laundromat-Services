@@ -1,161 +1,9 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { User } = require("../models");
 
-const { JWT_SECRET } = require('../config');
-const User = require('../models/users');
-
-
-exports.userSignUp = (req, res, next) => {
-
-    const { name, password, email, resumptionDate, phoneNumber, homeAddress } = req.body;
-    User
-        .find({ email })
-        .exec()
-        .then( result => {
-            if (result.length >= 1) {
-                return res.status(409).json({
-                    message: 'User already exists.'
-                })
-            } else {
-                bcrypt.hash(password, 10, (err, hash) => {
-                    if (err) {
-                        return res.status(500).json({
-                            error: 'Error occurred.'
-                        })
-                    } else {
-                        const user = new User({
-                            name, 
-                            password: hash, 
-                            email, 
-                            resumptionDate, 
-                            phoneNumber, 
-                            homeAddress 
-                        })
-                        user
-                            .save()
-                            .then( result => {
-                                console.log('User signed up successfully');
-                                res.status(201).json({ 
-                                    message: 'User(staff) signed up successfully',
-                                    result
-                                });
-                            })
-                            .catch( err => {
-                                console.log('Server error');
-                                res.status(500).json({
-                                    message: 'Server error'
-                                })
-                            })
-                    }
-                })
-            }
-        })
-
-}
-
-exports.userSignIn = (req, res, next) => {
-    const { email, password } = req.body;
-    User
-        .findOne({ email })
-        .exec()
-        .then( user => {
-            if (!user || user.length < 1) {
-                return res.status(400).json({
-                    message: 'Invalid login credentials'
-                })
-            }
-            bcrypt.compare(password, user.password, (err, result) => {
-                if (err) {
-                    return res.status(401).json({
-                        message: 'Invalid login credentials'
-                    })
-                }
-                if (result) {
-                    const token = jwt.sign(
-                        {
-                            email: user.email,
-                            userId: user._id
-                        }, 
-                        JWT_SECRET, 
-                        {
-                            expiresIn: '24h'
-                        }
-                    )
-                    return res.status(200).json({
-                        message: 'User logged in..',
-                        token
-                    })
-                }
-                res.status(401).json({
-                    message: 'Invalid login credentials'
-                })
-            })
-        })
-        .catch( err => {
-            res.status(500).json({ 
-                error: 'Server error' 
-            });
-        })
-
-}
-
-exports.userSignOut = (req, res, next) => {
-
-}
-
-// exports.addNewUser = (req, res, next) => {
-//     const { name, password, email, resumptionDate, phoneNumber, homeAddress } = req.body;
-
-//     User
-//         .find({ email })
-//         .exec()
-//         .then( result => {
-//             if (result.length >= 1) {
-//                 return res.status(409).json({
-//                     message: 'Can\'t add user. User with this email already exists'
-//                 })
-//             } else {
-//                 bcrypt.hash(password, 10, (err, hash) => {
-//                     if (err) {
-//                         return res.status(500).json({
-//                             error: err
-//                         })
-//                     }
-//                     const user = new User({
-//                         name, 
-//                         password: hash, 
-//                         email, 
-//                         resumptionDate,
-//                         phoneNumber, 
-//                         homeAddress
-//                     })
-//                     user
-//                         .save()
-//                         .then( result => {
-//                             return res.status(201).json({
-//                                 message: 'New User added successfully',
-//                                 result
-//                             })
-//                         })
-//                         .catch( err => {
-//                             console.log('Server error', err);
-//                             res.status(500).json({
-//                                 error: err
-//                             })
-//                         })
-//                 })
- 
-//             }
-//         })
-
-// }
-
-exports.updateUser = (req, res, next) => {
+exports.updateUser = (req, res) => {
     User
         .findByIdAndUpdate( req.params.userId, req.body, { new: true } )
-        .select('-password')
-        .exec()
+        .select('-password -__v')
         .then( result => {
             if (!result) {
                 return res.status(404).json({
@@ -168,82 +16,65 @@ exports.updateUser = (req, res, next) => {
             })
         })
         .catch( err => {
-            res.status(500).json({
-                error: err
+            return res.status(500).json({
+                error: "Error occurred. Unable to process your request.."
             })
         })
 
 }
 
-exports.deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res) => {
     User
-        .findByIdAndRemove(req.params.userId)
-        .exec()
+        .findByIdAndRemove(req.params.userId, { useFindAndModifiy: false })
         .then( result => {
             if (!result) {
                 return res.status(404).json({
                     message: 'User does not exist or has already been deleted'
                 })
             }
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'User deleted successfully'
             })
         })
         .catch( err => {
-            res.status(500).json({
-                error: err
+            return res.status(500).json({
+                error: "Error occurred. Unable to process your request.."
             })
         })
 
 }
 
-exports.getAllUsers = (req, res, next) => {
+exports.getAllUsers = (req, res) => {
     User
         .find()
-        .exec()
+        .populate("wash", "amount date")
+        .select("-password -__v")
         .then( users => {
-            res.status(200).json({
-                count: users.length,
-                users: users.map(user => {
-                    return {
-                        _id: user._id,
-                        name:user.name,
-                        email: user.email,
-                        phoneNumber:user.phoneNumber,
-                        homeAddress: user.homeAddress,
-                        resumptionDate: user.resumptionDate,
-                        request: {
-                            type: 'GET',
-                            url: 'http://localhost:5000/api/user/' + user._id
-                        }
-                    }                    
-                })
+            return res.status(200).json({
+                count: users.length + " Users",
+                users
             })
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({
-                message: err
+            return res.status(500).json({
+                message: "Error occurred. Unable to process your request.."
             })
         })
 }
 
-exports.getAUserById = (req, res, next) => {
+exports.getAUserById = (req, res) => {
     const id = req.params.userId
     User.findById(id)
-    .select('-password')
-    .exec()
+    .select('-password -__v')
     .then( doc => {
         console.log("From Database", doc);
         if (doc) {
-            res.status(200).json({
-                user: doc,
-                // request: 'GET',
-                // description: 'GET_ALL_USERS',
-                // url: 'http://localhost:5000/api/user'
+            return res.status(200).json({
+                user: doc
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'No valid entry found for the provided id'
             })
         }
@@ -251,6 +82,6 @@ exports.getAUserById = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        res.status(500).json({error: err || 'Having issues, internal server error.'})
+        return res.status(500).json({error: 'Problem occurred while processing your request..'})
     })
 }
