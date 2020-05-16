@@ -1,13 +1,8 @@
-const express = require("express");
-const mongoose = require('mongoose');
-const Customer = require('../models/customers');
+const { Customer } = require("../models");
 
-exports.addCustomer = (req, res, next) => {
-    if (!req.body) {
-        return res.status(400).send('Request body is missing')
-    }
+exports.addCustomer = (req, res) => {
 
-    const { name, email, registrationnDate, phoneNumber, homeAddress } = req.body;
+    const { name, email, registrationDate, phoneNumber, homeAddress } = req.body;
 
     Customer
         .find({ email })
@@ -21,21 +16,21 @@ exports.addCustomer = (req, res, next) => {
             const customer = new Customer({
                 name, 
                 email, 
-                registrationnDate, 
+                registrationDate, 
                 phoneNumber, 
                 homeAddress
             })
             customer
                 .save()
                 .then( record => {
-                    res.status(201).json({
+                    return res.status(201).json({
                         message: 'Customer added successfully',
                         customer: record
                     })
                 })
                 .catch( err => {
-                    res.status(500).json({
-                        error: err 
+                    return res.status(500).json({
+                        error: 'Error occurred. Unable to create customer'
                     })
                 })
         })
@@ -53,7 +48,7 @@ exports.updateCustomer = (req, res, next) => {
                 })
             }
             if(err) return res.status(500).json({
-                error: err
+                error: "Error occurred. Unable to process your request.."
             })
             return res.status(200).json({
                 message: 'Customer updated successfully',
@@ -72,7 +67,7 @@ exports.deleteCustomer = (req, res, next) => {
                 })
             }
             if(err) return res.status(500).json({
-                message: 'Internal server error'
+                message: 'Error occurred. Unable to process your request..'
             })
             return res.status(200).json({
                 message: 'Customer deleted successfully'
@@ -84,31 +79,18 @@ exports.deleteCustomer = (req, res, next) => {
 exports.getAllCustomers = (req, res, next) => {
     Customer
         .find()
-        .exec()
+        .populate("wash", "amount date")
+        .select("-__v")
         .then( customers => {
             res.status(200).json({
-                count: customers.length,
-                customers: customers.map(customer => {
-                    return {
-                        customer: customer
-                        // _id: customer._id,
-                        // name:customer.name,
-                        // email: customer.email,
-                        // phoneNumber: customer.phoneNumber,
-                        // homeAddress: customer.homeAddress,
-                        // registrationDate: customer.registrationDate,
-                        // request: {
-                        //     type: 'GET',
-                        //     url: 'http://localhost:5000/api/customer/' + customer._id
-                        // }
-                    }                    
-                })
+                count: customers.length + " Customers",
+                customers
             })
         })
         .catch( err => {
             console.log(err);
-            res.status(500).json({
-                message: err
+            return res.status(500).json({
+                message: "Error occurred. Unable to process your request.."
             })
         })
 }
@@ -116,18 +98,16 @@ exports.getAllCustomers = (req, res, next) => {
 exports.getCustomer = (req, res, next) => {
     const id = req.params.customerId
     Customer.findById(id)
-    .exec()
+    .select('-__v')
     .then( doc => {
         console.log("From Database", doc);
         if (doc) {
-            res.status(200).json({
-                customer: doc,
-                // request: 'GET',
-                // description: 'GET_ALL_CUSTOMERS',
-                // url: 'http://localhost:5000/api/customer'
+            return res.status(200).json({
+                meassage: "Customer found..",
+                customer: doc
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'No valid entry found for the provided id'
             })
         }
@@ -135,6 +115,6 @@ exports.getCustomer = (req, res, next) => {
     })
     .catch( err => {
         console.log(err)
-        res.status(500).json({error: err || 'Having issues, internal server error.'})
+        return res.status(500).json({error: 'Encountered problem while processing your request..'})
     })
 }
