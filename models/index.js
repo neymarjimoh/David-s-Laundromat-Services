@@ -1,6 +1,6 @@
 module.exports = {
     User: require('./User'),
     Customer: require('./Customer'),
-    Payment: require('./Payment'),
-    Wash: require('./Wash'),
+    Payment: require('./payment'),
+    Wash: require('./wash'),
 }
